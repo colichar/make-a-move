@@ -10,10 +10,10 @@ class Motor
           void Pin_init();
           /*Measuring_speed*/
           void Encoder_init();
-          static void EncoderCountRightA();
-          static void EncoderCountLeftA();
+
+         // void (Motor::*MOVE[4])(int speed); 
+          void Control(int AIN1_value,int BIN1_value,int PWM_pin,int speed);
           
-          void (Motor::*MOVE[4])(int speed); 
           void Stop();
           void Forward(int speed);
           void Back(int speed);

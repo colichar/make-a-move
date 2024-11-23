@@ -1,40 +1,35 @@
 #include "Motor.h"
-#include <Arduino.h>
+#include "Balanced.h"
 
-Motor Motor;
 
-/*You can set the speed: 0~255 */
-#define SPEED 150
+Timer2 Timer2;
+extern Mpu6050 Mpu6050;
+extern Motor Motor;
+extern Balanced Balanced;
 
-char strbuf[][50]={
-                    "Forward:encoder_count_right_a:",
-                    "Forward:encoder_count_left_a:",
-                    "Back:encoder_count_right_a:",
-                    "Back:encoder_count_left_a:",
-                    "Left:encoder_count_right_a:",
-                    "Left:encoder_count_left_a:",
-                    "Right:encoder_count_right_a:",
-                    "Right:encoder_count_left_a:"
-                   };
+
 
 void setup() 
 {
   Motor.Pin_init();
   Motor.Encoder_init();
+  Timer2.init(TIMER);
+  Mpu6050.init();
   Serial.begin(9600);
+  delay(100);
 }
 
-void loop() {
-    
-   for(int i = 0,j=0; i < 4,j<8; i++)
+void loop() 
+{
+  int direction_buf[] = {FORWARD,BACK,LEFT,RIGHT,STOP};
+  static unsigned long print_time;
+  
+  for(int i=0;i<5;)
   {
-    (Motor.*(Motor.MOVE[i]))(SPEED);
-    delay(2000);
-    Serial.print(strbuf[j++]);
-    Serial.println(Motor.encoder_count_right_a);
-    Serial.print(strbuf[j++]);
-    Serial.println(Motor.encoder_count_left_a);
-    Motor.encoder_count_right_a=0;
-    Motor.encoder_count_left_a=0;
-    }
+      if(millis() - print_time > 5000)
+   { 
+      print_time = millis();
+      Balanced.Motion_Control(direction_buf[i++]);
+   }
+  }
 }

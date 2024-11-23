@@ -13,16 +13,14 @@ void Motor::Pin_init()
 
 Motor::Motor()
 {
-  MOVE[0] = &Motor::Forward;
-  MOVE[1] = &Motor::Back;
-  MOVE[2] = &Motor::Left;
-  MOVE[3] = &Motor::Right;
+//  MOVE[0] = &Motor::Forward;
+//  MOVE[1] = &Motor::Back;
+//  MOVE[2] = &Motor::Left;
+//  MOVE[3] = &Motor::Right;
 }
 
 void Motor::Stop()
 {
-  digitalWrite(AIN1, HIGH);
-  digitalWrite(BIN1, LOW);
   analogWrite(PWMA_LEFT, 0);
   analogWrite(PWMB_RIGHT, 0);
 }
@@ -58,4 +56,10 @@ void Motor::Right(int speed)
   digitalWrite(BIN1, 1);
   analogWrite(PWMA_LEFT,0);
   analogWrite(PWMB_RIGHT,speed);
+}
+
+void Motor::Control(int PIN,int PIN_value,int PWM_pin,int speed)
+{
+  digitalWrite(PIN, PIN_value);
+  analogWrite(PWM_pin,speed);
 }

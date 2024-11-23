@@ -1,7 +1,8 @@
 #include "Motor.h"
 #include "EnableInterrupt.h"
 
-
+static void EncoderCountRightA();
+static void EncoderCountLeftA();
 
 void Motor::Encoder_init()
 {
@@ -10,16 +11,16 @@ void Motor::Encoder_init()
 }
 
 unsigned long Motor::encoder_count_right_a;
-//Getting right wheel speed.
-static void Motor::EncoderCountRightA()
+//Getting Right Wheel Speed.
+static void EncoderCountRightA()
 {
   Motor::encoder_count_right_a++;
 }
 
 
 unsigned long Motor::encoder_count_left_a;
-//Getting left wheel speed.
-static void Motor::EncoderCountLeftA()
+//Getting Left Wheel Speed.
+static void EncoderCountLeftA()
 {
   Motor::encoder_count_left_a++;
 }
