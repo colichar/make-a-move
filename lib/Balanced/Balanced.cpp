@@ -3,7 +3,7 @@
 #include "Motor.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "KalmanFilter.h"
-MPU6050 mpu6050_sensor;
+MPU6050 MPU6050;
 Mpu6050 Mpu6050;
 Balanced Balanced;
 KalmanFilter kalmanfilter;
@@ -19,7 +19,7 @@ static void Timer2::interrupt()
   sei();//enable the global interrupt
   Balanced.Get_EncoderSpeed();
   Mpu6050.DataProcessing();
-  Balanced.PD_VerticalRing();
+  Balanced.PD_VerticalRing();//Serial.println(Balanced.setting_turn_speed);
   Balanced.interrupt_cnt++;
   if(Balanced.interrupt_cnt > 8)
   {
@@ -41,11 +41,10 @@ void Balanced::Total_Control()
 {
   pwm_left = balance_control_output - speed_control_output - rotation_control_output;//Superposition of Vertical Velocity Steering Ring
   pwm_right = balance_control_output - speed_control_output + rotation_control_output;//Superposition of Vertical Velocity Steering Ring
-
   pwm_left = constrain(pwm_left, -255, 255);
   pwm_right = constrain(pwm_right, -255, 255);
 
-   while(EXCESSIVE_ANGLE_TILT || PICKED_UP)
+  while(EXCESSIVE_ANGLE_TILT || PICKED_UP)
   { 
     Mpu6050.DataProcessing();
     Motor.Stop();
@@ -56,14 +55,15 @@ void Balanced::Total_Control()
   
   (pwm_right < 0) ? (Motor.Control(BIN1,1,PWMB_RIGHT,-pwm_right)): 
                     (Motor.Control(BIN1,0,PWMB_RIGHT,pwm_right));
+
 }
 
 void Balanced::Get_EncoderSpeed()
 {
-  encoder_left_pulse_num_speed += pwm_left < 0 ? (-Motor::encoder_count_left_a) : 
+  encoder_left_pulse_num_speed += pwm_left < 0 ? -Motor::encoder_count_left_a : 
                                                   Motor::encoder_count_left_a;
-  encoder_right_pulse_num_speed += pwm_right < 0 ? (-Motor::encoder_count_right_a) :
-                                                  Motor::encoder_count_right_a;
+  encoder_right_pulse_num_speed += pwm_right < 0 ? -Motor::encoder_count_right_a : 
+                                                    Motor::encoder_count_right_a;
   Motor::encoder_count_left_a=0;
   Motor::encoder_count_right_a=0;
 }
@@ -145,7 +145,7 @@ void Balanced::PI_SteeringRing()
 void Mpu6050::init()
 {
    Wire.begin();         
-   mpu6050_sensor.initialize();    
+   MPU6050.initialize();    
  }
 
 Mpu6050::Mpu6050()
@@ -155,6 +155,6 @@ Mpu6050::Mpu6050()
 
 void Mpu6050::DataProcessing()
 {  
-  mpu6050_sensor.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);// Data acquisition of MPU6050 gyroscope and accelerometer
+  MPU6050.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);// Data acquisition of MPU6050 gyroscope and accelerometer
   kalmanfilter.Angletest(ax, ay, az, gx, gy, gz, dt, Q_angle, Q_gyro, R_angle, C_0, K1);// Obtaining Angle by Kalman Filter
 }

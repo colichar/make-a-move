@@ -11,14 +11,6 @@ void Motor::Pin_init()
   digitalWrite(STBY_PIN, HIGH);
 }
 
-Motor::Motor()
-{
-//  MOVE[0] = &Motor::Forward;
-//  MOVE[1] = &Motor::Back;
-//  MOVE[2] = &Motor::Left;
-//  MOVE[3] = &Motor::Right;
-}
-
 void Motor::Stop()
 {
   analogWrite(PWMA_LEFT, 0);
