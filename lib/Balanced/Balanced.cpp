@@ -1,6 +1,7 @@
 #include "Balanced.h"
 #include "Wire.h"
 #include "Motor.h"
+#include "Obstacle.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "KalmanFilter.h"
 MPU6050 MPU6050_sensor;
@@ -8,6 +9,9 @@ Mpu6050 Mpu6050;
 Balanced Balanced;
 KalmanFilter kalmanfilter;
 Motor Motor;
+extern IR IR;
+extern Ultrasonic Ultrasonic;
+
 void Timer2::init(int time)
 {
   MsTimer2::set(time,interrupt);
@@ -28,6 +32,9 @@ static void Timer2::interrupt()
     Balanced.PI_SteeringRing();
    }
   Balanced.Total_Control();
+  
+  IR.Send();
+  Ultrasonic.Get_Distance();
 }
 
 Balanced::Balanced()
@@ -107,13 +114,13 @@ void Balanced::Back(int speed)
 
 void Balanced::Left(int speed)
 {
-  setting_car_speed = 0;
+  setting_car_speed = -speed;
   setting_turn_speed = speed;
 }
 
 void Balanced::Right(int speed)
 {
-  setting_car_speed = 0;
+  setting_car_speed = -speed;
   setting_turn_speed = -speed;
 }
 

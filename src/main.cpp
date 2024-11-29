@@ -1,7 +1,6 @@
 #include "Motor.h"
 #include "Balanced.h"
-#include "Follow.h"
-
+#include "Obstacle.h"
 
 
 Timer2 Timer2;
@@ -26,6 +25,6 @@ void setup()
 }
 
 void loop() 
-{  
-   Function.Follow_Mode1();
+{ 
+   Function.Obstacle_Mode();
 }

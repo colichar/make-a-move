@@ -47,14 +47,14 @@ void Motor::Right(int speed)
 {
   digitalWrite(AIN1, 1);
   digitalWrite(BIN1, 1);
-  analogWrite(PWMA_LEFT,0);
-  analogWrite(PWMB_RIGHT,speed);
+  analogWrite(PWMA_LEFT, 0);
+  analogWrite(PWMB_RIGHT, speed);
 }
 
-void Motor::Control(int PIN,int PIN_value,int PWM_pin,int speed)
+void Motor::Control(int PIN, int PIN_value, int PWM_pin, int speed)
 {
   digitalWrite(PIN, PIN_value);
-  analogWrite(PWM_pin,speed);
+  analogWrite(PWM_pin, speed);
 }
 
 
