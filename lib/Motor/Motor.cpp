@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "Motor.h"
+#include "Interrupts.h"
 
 void Motor::Pin_init()
 {
@@ -55,3 +56,10 @@ void Motor::Control(int PIN,int PIN_value,int PWM_pin,int speed)
   digitalWrite(PIN, PIN_value);
   analogWrite(PWM_pin,speed);
 }
+
+
+void Motor::Encoder_init()
+{
+  EnableMotorInterrupts();
+}
+

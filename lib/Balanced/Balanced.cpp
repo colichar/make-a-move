@@ -3,7 +3,7 @@
 #include "Motor.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "KalmanFilter.h"
-MPU6050 MPU6050;
+MPU6050 MPU6050_sensor;
 Mpu6050 Mpu6050;
 Balanced Balanced;
 KalmanFilter kalmanfilter;
@@ -145,7 +145,7 @@ void Balanced::PI_SteeringRing()
 void Mpu6050::init()
 {
    Wire.begin();         
-   MPU6050.initialize();    
+   MPU6050_sensor.initialize();    
  }
 
 Mpu6050::Mpu6050()
@@ -155,6 +155,6 @@ Mpu6050::Mpu6050()
 
 void Mpu6050::DataProcessing()
 {  
-  MPU6050.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);// Data acquisition of MPU6050 gyroscope and accelerometer
+  MPU6050_sensor.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);// Data acquisition of MPU6050 gyroscope and accelerometer
   kalmanfilter.Angletest(ax, ay, az, gx, gy, gz, dt, Q_angle, Q_gyro, R_angle, C_0, K1);// Obtaining Angle by Kalman Filter
 }

@@ -1,4 +1,7 @@
 #include "Follow.h"
+#include "KalmanFilter.h"
+#include "MsTimer2.h"
+#include "Interrupts.h"
 
 IR IR;
 Ultrasonic Ultrasonic;
@@ -27,6 +30,31 @@ void Function::Follow_Mode1()
   }
      
 }
+
+void IR::Pin_init()
+{
+  pinMode(LEFT_RECEIVE_PIN, INPUT_PULLUP);
+  pinMode(RIGHT_RECEIVE_PIN, INPUT_PULLUP);
+  pinMode(IR_SEND_PIN, OUTPUT);
+  EnableIRInterrupts();   
+}
+
+void Ultrasonic::Get_Distance()
+{
+  if (millis() - get_distance_prev_time > 50)
+  { 
+    delayMicroseconds(1);
+    get_distance_prev_time = millis();
+    measure_flag = 0;
+    EnableUltrasonicInterrupts();
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+  }
+}
+
 
 void IR::Check()
 {
