@@ -1,17 +1,23 @@
 #include "Motor.h"
 #include "Balanced.h"
+#include "Follow.h"
+
 
 
 Timer2 Timer2;
 extern Mpu6050 Mpu6050;
 extern Motor Motor;
 extern Balanced Balanced;
-
+extern Ultrasonic Ultrasonic;
+extern IR IR;
+Function Function;
 
 
 void setup() 
 {
   Motor.Pin_init();
+  IR.Pin_init();
+  Ultrasonic.Pin_init();
   Motor.Encoder_init();
   Timer2.init(TIMER);
   Mpu6050.init();
@@ -20,16 +26,6 @@ void setup()
 }
 
 void loop() 
-{
-  int direction_buf[] = {FORWARD,BACK,LEFT,RIGHT,STOP};
-  static unsigned long print_time;
-  
-  for(int i=0;i<5;)
-  {
-      if(millis() - print_time > 5000)
-   { 
-      print_time = millis();
-      Balanced.Motion_Control(direction_buf[i++]);
-   }
-  }
+{  
+   Function.Follow_Mode1();
 }

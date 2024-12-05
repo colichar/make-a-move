@@ -5,13 +5,10 @@
 class Motor
 {
   public:
-          Motor();
-          
           void Pin_init();
           /*Measuring_speed*/
           void Encoder_init();
-
-         // void (Motor::*MOVE[4])(int speed); 
+           
           void Control(int AIN1_value,int BIN1_value,int PWM_pin,int speed);
           
           void Stop();
